@@ -1,6 +1,8 @@
 @startuml
+skinparam monochrome reverse
+
 actor Аналитик as analyst
-database Репозиторий as repo
+database "Репозиторий с API" as repo
 actor Разработчик as dev
 participant Nexus as nexus
 
