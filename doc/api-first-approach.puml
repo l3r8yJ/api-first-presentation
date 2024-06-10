@@ -5,7 +5,7 @@ actor Разработчик as dev
 participant Nexus as nexus
 
 analyst -> repo: Pull Request
-dev -> analyst: Code Review
+dev --> analyst: Code Review
 alt Ревью пройдено
 analyst -> repo: Merge Pull Request
 repo -> nexus: Jar с контрактами
