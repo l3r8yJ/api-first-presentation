@@ -1,5 +1,9 @@
 @startuml
-skinparam monochrome reverse
+'skinparam monochrome true
+skinparam fontClassColor white
+skinparam component {
+  FontColor white
+}
 
 actor Аналитик as analyst
 database "Репозиторий с API" as repo
