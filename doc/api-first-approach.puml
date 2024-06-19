@@ -1,20 +1,15 @@
 @startuml
-'skinparam monochrome true
-skinparam fontClassColor white
-skinparam component {
-  FontColor white
-}
-
+skinparam monochrome true
 actor Аналитик as analyst
 database "Репозиторий с API" as repo
 actor Разработчик as dev
-participant Nexus as nexus
+participant Artifactory as nexus
 
 analyst -> repo: Pull Request
 dev --> analyst: Code Review
 alt Ревью пройдено
 analyst -> repo: Merge Pull Request
-repo -> nexus: Jar с контрактами
-nexus -> dev: Jar с контрактами
+repo -> nexus: Артефакт
+nexus -> dev: Артефакт
 end
 @enduml
