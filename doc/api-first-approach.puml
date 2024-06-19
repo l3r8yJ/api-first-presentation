@@ -1,5 +1,5 @@
 @startuml
-skinparam monochrome true
+skinparam monochrome reverse
 actor Аналитик as analyst
 database "Репозиторий с API" as repo
 actor Разработчик as dev
