@@ -1,0 +1,34 @@
+@startuml upsert_ticket
+
+title "Upsert Ticket"
+skinparam monochrome reverse
+
+box Frontend $frontendColor
+    actor "Оператор" as user order 10
+    participant "Web-Client" as client order 20
+end box
+
+box Backend $backendColor
+    participant "Service" as service order 30
+    database "Database" as db order 40
+end box
+
+group Редактирование обращения
+    activate client
+        user -> client: Заполняет поля экранной формы и нажимает на кнопку\n"Сохранить изменения"
+        client -> client: Валидация обязательных полей формы
+        alt $failureBackgroundColor Failure: Форма не прошла валидацию
+            client --> user: Подсветить незаполненные поля
+        else $successBackgroundColor Success: Форма прошла валидацию
+            client -> service: Вызвать метод [[$mutationCssdTicketsUpsert Обновить обращение]]
+            activate service
+                service -> db: Создать/Изменить обращение в таблице [[$ticketsTable tickets]]
+                service -> db: Создать/Изменить причины обращения в таблице [[$issuesTable issues]]
+                service -> db: Создать запись в таблице [[$eventsOutbox events_outbox]]
+                service --> client: Вернуть ответ с атрибутами созданного/измененного обращения
+            deactivate service
+            client --> user: Закрыть карточку обращения
+        end
+    deactivate client
+end
+@enduml
