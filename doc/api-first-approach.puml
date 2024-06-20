@@ -3,7 +3,7 @@ skinparam monochrome reverse
 actor Аналитик as analyst
 database "Репозиторий с API" as repo
 actor Разработчик as dev
-participant Artifactory as nexus
+participant Registry as nexus
 
 analyst -> repo: Pull Request
 dev --> analyst: Code Review
