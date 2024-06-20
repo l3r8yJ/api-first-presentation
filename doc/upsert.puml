@@ -1,7 +1,7 @@
-@startuml upsert_ticket
+@startuml create_ticket
 
-title "Upsert Ticket"
 skinparam monochrome reverse
+title "Create Ticket"
 
 box Frontend $frontendColor
     actor "Оператор" as user order 10
@@ -13,21 +13,23 @@ box Backend $backendColor
     database "Database" as db order 40
 end box
 
-group Редактирование обращения
+group Создание обращения
     activate client
-        user -> client: Заполняет поля экранной формы и нажимает на кнопку\n"Сохранить изменения"
-        client -> client: Валидация обязательных полей формы
-        alt $failureBackgroundColor Failure: Форма не прошла валидацию
-            client --> user: Подсветить незаполненные поля
-        else $successBackgroundColor Success: Форма прошла валидацию
-            client -> service: Вызвать метод [[$mutationCssdTicketsUpsert Обновить обращение]]
+        user -> client: Вызов принят
+        user -> client: Нажата кнопка "Создать обращение"
+
+        client -> client: Проверка наличия активного звонка
+
+        alt $failureBackgroundColor Failure: Нет активного звонка
+            client --> user: Вернуть ошибку отсутствия звонка
+        else $successBackgroundColor Success: Активный звонок есть
+            client -> service: Вызвать метод [[$mutationCssdTicketsCreate Создать обращение]]
             activate service
-                service -> db: Создать/Изменить обращение в таблице [[$ticketsTable tickets]]
-                service -> db: Создать/Изменить причины обращения в таблице [[$issuesTable issues]]
+                service -> db: Создать обращение в таблице [[$ticketsTable tickets]]
                 service -> db: Создать запись в таблице [[$eventsOutbox events_outbox]]
-                service --> client: Вернуть ответ с атрибутами созданного/измененного обращения
+                service --> client: Вернуть ответ с атрибутами созданного обращения
             deactivate service
-            client --> user: Закрыть карточку обращения
+            client --> user: Открыть карточку обращения для заполнения
         end
     deactivate client
 end
